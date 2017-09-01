@@ -90,7 +90,10 @@ $(document).ready(function() {
 
 function handleNewSongSubmit(){
   // retreat all data and store in var and clear out the
-  // input fields
+  // input fields.
+  // NOTE: that the track number and songName are not filtered
+  // Program will crash if its not the type of data the database are 
+  // setup. Better if we do regex to filter those when arrive.
   var albumID = $('#songModal').data('album-id');
   var songName = $('#songName').val();
   var trackNum = $('#trackNumber').val();
@@ -111,7 +114,9 @@ function handleNewSongSubmit(){
   })
   .then(function(theAddedAlbum){
     console.log("Retreated data from song submit is: "+ theAddedAlbum);
-    // hide the original album and prepend the newly updated album by id
+    // hide the original album and prepend the newly updated album 
+    // by id. Make it looks like the newly added song will appear above others
+    // and rendered live, while maintaining data after refresh
     $(`[data-album-id=${albumID}]`).hide();
     renderAlbum(theAddedAlbum);
     // renderAlbum(theAddedAlbum);
