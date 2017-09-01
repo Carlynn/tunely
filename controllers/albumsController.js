@@ -53,6 +53,11 @@ function create(req, res) {
 // GET /api/albums/:albumId
 function show(req, res) {
   // find one album by id and send it back as JSON
+  db.Album.findById(req.params.id, function(err, album){
+    if(err) {return console.log(err)}
+      res.send(album);
+  });
+
 }
 
 // DELETE /api/albums/:albumId

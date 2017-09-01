@@ -63,16 +63,64 @@ $(document).ready(function() {
     .then(function(newAlbum){
       console.log("data received");
       console.log(newAlbum);
+      $('input').val("");
       renderAlbum(newAlbum);
     })
-    .error(function(err){
+    .catch(function(err){
       console.log(err);
     });
+  });
 
+  $('#albums').on('click', '.add-song', function(e) {
+      console.log('add-song clicked!');
+      var id= $(this).closest('.album').data('album-id'); // "5665ff1678209c64e51b4e7b"
+      console.log('id',id);
+      // setting modal's data-album-id to be the album id
+      $('#songModal').data('album-id', id);
+      $(`#songModal`).modal();
+
+  });
+
+  $('#modal_save').on('click', function(e) {
+      console.log('Modal save is clicked!');
+      handleNewSongSubmit();
   });
 
 });
 
+function handleNewSongSubmit(){
+  // retreat all data and store in var and clear out the
+  // input fields
+  var albumID = $('#songModal').data('album-id');
+  var songName = $('#songName').val();
+  var trackNum = $('#trackNumber').val();
+  $('#songName').val("");
+  $('#trackNumber').val("");
+  $(`#songModal`).modal('hide');
+  console.log("song name is " + songName );
+  console.log("track number is " + trackNum );
+
+  // Prepare ajax call using input from form
+  $.ajax({
+    method: 'POST',
+    url: `/api/albums/${albumID}/songs`,
+    data: {
+      name: songName,
+      trackN : trackNum
+    } 
+  })
+  .then(function(theAddedAlbum){
+    console.log("Retreated data from song submit is: "+ theAddedAlbum);
+    // hide the original album and prepend the newly updated album by id
+    $(`[data-album-id=${albumID}]`).hide();
+    renderAlbum(theAddedAlbum);
+    // renderAlbum(theAddedAlbum);
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+
+};
 
 function handleSuccess (albums) {
     albums.forEach(function(album) {
@@ -92,8 +140,20 @@ function handleError(err){
 function renderAlbum(album) {
   // console.log('rendering album:', album);
 
+
+  var songs = album.songs;
+  var display_songs = `<span>`;
+
+  
+  for(var i = 1; i < songs.length+1; i++){
+    display_songs = display_songs + ` - (${i}) ` + songs[i-1].name ;
+  }
+  display_songs = display_songs + ` - </span>`;
+
+
   var newHTML = (`
-  <div class="row album">
+
+  <div class="row album" data-album-id="${album._id}">
 
     <div class="col-md-10 col-md-offset-1">
       <div class="panel panel-default">
@@ -127,19 +187,28 @@ function renderAlbum(album) {
                   <h4 class='inline-header'>Genres:</h4>
                   <span class='album-releaseDate'>${album.genres}</span>
                 </li>
+
+                <li class="list-group-item">
+                  <h4 class='inline-header'>Songs:</h4>
+                  ${display_songs}
+                </li>
               </ul>
             </div>
+              
 
           </div>
           <!-- end of album internal row -->
 
           <div class='panel-footer'>
+            <button class='btn btn-primary add-song'>Add Song</button>
           </div>
 
         </div>
       </div>
     </div>
-  </div>`);
+  </div>`
+
+  );
   $("#albums").prepend(newHTML);
 
 };
