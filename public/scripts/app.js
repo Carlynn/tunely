@@ -117,7 +117,7 @@ function handleNewSongSubmit(){
     // hide the original album and prepend the newly updated album 
     // by id. Make it looks like the newly added song will appear above others
     // and rendered live, while maintaining data after refresh
-    $(`[data-album-id=${albumID}]`).hide();
+    $(`[data-album-id=${albumID}]`).remove();
     renderAlbum(theAddedAlbum);
     // renderAlbum(theAddedAlbum);
   })
