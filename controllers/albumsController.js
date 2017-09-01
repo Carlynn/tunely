@@ -27,17 +27,21 @@ function index(req, res) {
 // POST /api/albums
 function create(req, res) {
   // create an album based on request body and send it back as JSON
+
+  var genresList = req.body.genres.split(",");
+  // console.log(genresList);
   var album = new db.Album({
     name: req.body.name,
     artistName: req.body.artistName,
     releaseDate: req.body.releaseDate,
+    genres: genresList,
   });
 
   album.save(function(err, newAlbum){
     if(err) {return console.log(err)}
     console.log("new form has added");
     // res.send(newAlbum);
-    res.redirect("/");
+    res.json(newAlbum);
   });
   // console.log(req.name);
 

@@ -58,12 +58,18 @@ $(document).ready(function() {
     $.ajax({
       method: 'POST',
       url: '/api/albums',
-      data: input,
+      data: input
+    })
+    .then(function(newAlbum){
+      console.log("data received");
+      console.log(newAlbum);
+      renderAlbum(newAlbum);
+    })
+    .error(function(err){
+      console.log(err);
     });
 
   });
-
-
 
 });
 
@@ -115,6 +121,11 @@ function renderAlbum(album) {
                 <li class="list-group-item">
                   <h4 class='inline-header'>Released date:</h4>
                   <span class='album-releaseDate'>${album.releaseDate}</span>
+                </li>
+
+                <li class="list-group-item">
+                  <h4 class='inline-header'>Genres:</h4>
+                  <span class='album-releaseDate'>${album.genres}</span>
                 </li>
               </ul>
             </div>
