@@ -33,6 +33,8 @@ $(document).ready(function() {
   $('#saveSong').on('click', handleNewSongSubmit);
 
   $('#albums').on('click', '.delete-song', deleteSongSubmit);
+
+  $('#albums').on('click', '.edit-album', editsAlbumSubmit);
 });
 
 function deleteSongSubmit(e) {
@@ -115,16 +117,15 @@ function renderAlbum(album) {
 
             </div>
             <!-- end of album internal row -->
-
             <div class='panel-footer'>
-              <div class='panel-footer'>
-                <button class='btn btn-primary add-song'>Add Song</button>
-              </div>
-              <div class='panel-footer'>
-                <button class='btn btn-danger delete-song'>Delete</button>
-              </div>
+            <button class='btn btn-info edit-album'>Edit Album</button>
+          
+            <button class='btn btn-primary add-song'>Add Song</button>
 
+            <button class='btn btn-danger delete-song'>Delete</button>
             </div>
+
+            
     <!-- end one album -->
   `);
   $('#albums').prepend(albumHtml);
