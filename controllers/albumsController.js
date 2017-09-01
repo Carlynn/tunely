@@ -40,9 +40,14 @@ function show(req, res) {
 
 // DELETE /api/albums/:albumId
 function destroy(req, res) {
+  console.log(req.params.albumId)
   // find one album by id, delete it, and send it back as JSON
+  db.Album.findByIdAndRemove(req.params.albumId, function(err, deleteSong) {
+    if(err) { console.log('albumsController.destroy error', err); }
+    console.log('albumsController.destroy responding with', deleteSong);
+    res.json(deleteSong);
+  });
 }
-
 // PUT or PATCH /api/albums/:albumId
 function update(req, res) {
   // find one album by id, update it based on request body,
